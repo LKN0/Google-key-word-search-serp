@@ -16,4 +16,4 @@ A reliable full-stack Flask web application for querying Google search results v
 
 For full setup instructions, see:
 - [English Documentation](README-en.md)
-- [Česká dokumentace](README-cz.md)
+- [Czech Documentation](README-cz.md)

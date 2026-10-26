@@ -20,7 +20,7 @@ def get_google_results(keyword):
         response.raise_for_status()
         data = response.json()
     except requests.RequestException as e:
-        print(f"Chyba při volání SerpAPI: {e}")
+        print(f"Error calling SerpAPI: {e}")
         return []
 
     organic_results = data.get("organic_results", [])
