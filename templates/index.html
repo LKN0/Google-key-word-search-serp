@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        form{
+            display: flex;
+            flex-direction: column; 
+            align-items: center;   
+            gap: 15px;
+        }
+        input{
+            width: 250px;
+            font-size: 25px;
+            border: 2px solid purple;
+            border-radius: 12px;
+            padding: 6px 12px;
+             }
+        button{
+            font-size: 20px;
+            padding: 8px 24px;
+            border-radius: 8px;
+            border: none;
+            background-color: purple;
+            color: white;
+            cursor: pointer;
+        }
+        p {
+            max-width: 30ch;           
+            overflow-wrap: break-word; 
+            text-align: center;        
+        }
+    </style>
+    <title>Key-word searcher</title>
+</head>
+<body>
+    <h1>Key-word searcher - edition Lešikar</h1>
+    
+    <form method="POST" action="/" id="search-form" onsubmit="showLoading()">
+        <input type="text" name="keyword" placeholder="Type a keyword!" maxlength="100" required>
+        <button type="submit" id="search-btn">Search</button>
+    </form>
+
+   
+    <div id="loader" style="display: none; margin-top: 20px; flex-direction: column; align-items: center; justify-content: center;">
+        <img src="{{ url_for('static', filename='loader.gif') }}" alt="Loading..." width="50">
+        <p style="color: purple; font-size: 14px; max-width: none; margin-top: 8px;">Searching Google...</p>
+    </div>
+
+    {% if word %}
+        {% if results %}
+            <p>Found {{ results|length }} results for: {{ word }}</p>
+            <form method="POST" action="/download">
+                <input type="hidden" name="keyword" value="{{ word }}">
+                <input type="hidden" name="results_json" value='{{ results|tojson }}'>
+                <button type="submit">Download</button>
+            </form>
+
+            <div>
+                {% for item in results %}
+                    <p>
+                        <strong>{{ item.position }}. <a href="{{ item.link }}" target="_blank">{{ item.title }}</a></strong><br>
+                        {{ item.snippet }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No results found for: {{ word }}</p>
+        {% endif %}
+    {% endif %}
+
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        function showLoading() {
+            document.getElementById("search-btn").disabled = true;
+            document.getElementById("search-btn").style.backgroundColor = "gray";
+           
+            document.getElementById("loader").style.display = "flex";
+        }
+        
+    </script>
+</body>
+</html>
